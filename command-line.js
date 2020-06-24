@@ -46,8 +46,27 @@ switch (verb) {
     id = process.argv[3];
     const newVillainName = process.argv[4];
     client.query('UPDATE movie_villains SET villain = $1 WHERE id = $2;', [newVillainName, id])
-      .then((data) => {
+      .then(() => {
         console.log('villain updated successfully');
+        client.end();
+      });
+    break;
+
+  case 'add':
+    const newVillain = process.argv[3];
+    const newMovie = process.argv[4];
+    client.query('INSERT INTO movie_villains(villain, movie) VALUES($1, $2);', [newVillain, newMovie])
+      .then(() => {
+        console.log('villain added to roster');
+        client.end();
+      });
+    break;
+
+  case 'delete':
+    id = process.argv[3];
+    client.query('DELETE FROM movie_villains WHERE id = $1;', [id])
+      .then(() => {
+        console.log('villain has been dealt with');
         client.end();
       });
     break;
